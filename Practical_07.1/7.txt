@@ -1,0 +1,60 @@
+import math
+
+class WordCount:
+    def countSpecificWord(self):
+        count = 0
+        for word in contents:
+            if word == "word":
+                count += 1
+        print("Count for \"word\": ", count)
+
+    def posTagging(self):
+        pos_tags = []
+        for word in contents:
+            if word.endswith("ing"):
+                pos_tags.append((word, "VBG"))  # Verb, Gerund
+            elif word.endswith("ed"):
+                pos_tags.append((word, "VBD"))  # Verb, Past Tense
+            else:
+                pos_tags.append((word, "NN"))  # Noun
+
+        print("POS Tagging:")
+        for word, pos_tag in pos_tags:
+            print(word, ": ", pos_tag, end=", ")
+
+    def removeStopWords(self):
+        stop_words = ['a', 'an', 'the', 'in', 'on', 'at', 'is', 'are', 'and', 'or', 'of']
+        words_term_frequency = {}
+        document_count = len(contents)
+
+        for word in contents:
+            if word not in stop_words:
+                if word in words_term_frequency:
+                    words_term_frequency[word] += 1
+                else:
+                    words_term_frequency[word] = 1
+
+        filtered_words = [word for word in contents if word.lower() not in stop_words]
+
+        data = " ".join(filtered_words)
+
+        with open("sample_data.txt", "w") as f:
+            f.write(data)
+
+        print("Term Frequency: ")
+        for word, count in words_term_frequency.items():
+            print(word, ": ", count, end=", ")
+
+        print("Inverse Document Frequency:")
+        for word, count in words_term_frequency.items():
+            idf = math.log(document_count / (count + 1))  # Adding 1 to avoid division by zero
+            print(word, ": ", idf, end=", ")
+
+
+file = open("sample_data.txt", "r")
+contents = file.read().split()
+wc = WordCount()
+
+wc.countSpecificWord()
+wc.posTagging()
+wc.removeStopWords()
